@@ -1,0 +1,38 @@
+app:
+  build: ./startup/
+  volumes:
+    - "/full/path/to/bot_code/:/opt/app"
+    - "./startup:/opt/startup"
+
+fpm:
+  build: ./fpm/
+  volumes_from:
+    - app
+
+nginx:
+  hostname: nginx
+  build: ./nginx/
+  ports:
+    - "8080:80"
+  volumes_from:
+    - app
+  links:
+    - fpm:fpm
+
+ngrok:
+  image: wernight/ngrok
+  hostname: ngrok
+  ports:
+    - "4040:4040"
+  links:
+    - nginx:http
+  command: ngrok http nginx:80 -log stdout
+
+connect:
+  image: php
+  links:
+      - ngrok:ngrok
+      - fpm:fpm
+  volumes_from:
+    - app
+  command: php /opt/startup/startup.php
