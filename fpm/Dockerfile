@@ -1,8 +1,9 @@
 FROM php:fpm
 
 RUN pecl install xdebug-beta && \
-docker-php-ext-enable xdebug
-RUN conf=
+docker-php-ext-enable xdebug && \
+docker-php-ext-install pdo pdo_mysql
+
 RUN echo "env[PHP_IDE_CONFIG] = \"serverName=bot\"" >> /usr/local/etc/php-fpm.d/www.conf
 
 RUN echo "xdebug.max_nesting_level=500" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini  && \

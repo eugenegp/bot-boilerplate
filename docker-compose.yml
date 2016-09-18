@@ -1,13 +1,15 @@
 app:
   build: ./startup/
   volumes:
-    - "/full/path/to/bot_code/:/opt/app"
+    - "$HOME/projects/second-bot/:/opt/app"
     - "./startup:/opt/startup"
 
 fpm:
   build: ./fpm/
   volumes_from:
     - app
+  links:
+    - db:db
 
 nginx:
   hostname: nginx
@@ -31,8 +33,17 @@ ngrok:
 connect:
   image: php
   links:
-      - ngrok:ngrok
-      - fpm:fpm
+    - ngrok:ngrok
+    - fpm:fpm
   volumes_from:
     - app
   command: php /opt/startup/startup.php
+
+db:
+  hostname: db
+  image: mysql
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_DATABASE: bot

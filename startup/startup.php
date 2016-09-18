@@ -3,7 +3,8 @@
 sleep(2); // waiting for ngrok init
 $content = file_get_contents('http://ngrok:4040/api/tunnels');
 $data = json_decode($content, true);
-echo $data['tunnels'][0]['public_url'];
+$url = 'https://'.parse_url($data['tunnels'][0]['public_url'], PHP_URL_HOST);
 
 umask(000);
-file_put_contents(__DIR__ . '/../app/url.txt', $data['tunnels'][1]['public_url']); // get https domain for bot webhooks
+file_put_contents(__DIR__ . '/../app/url.txt', $url); // get https domain for bot webhooks
+file_get_contents($url . '/setwebhook.php');
