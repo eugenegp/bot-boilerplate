@@ -6,5 +6,5 @@ $data = json_decode($content, true);
 $url = 'https://'.parse_url($data['tunnels'][0]['public_url'], PHP_URL_HOST);
 
 umask(000);
-file_put_contents(__DIR__ . '/../app/url.txt', $url); // get https domain for bot webhooks
-file_get_contents($url . '/setwebhook.php');
+file_put_contents('/opt//app/url.txt', $url); // get https domain for bot webhooks
+require('/opt/app/setwebhook.php');
