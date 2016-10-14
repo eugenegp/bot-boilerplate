@@ -1,7 +1,7 @@
 FROM php:fpm
 
-RUN pecl install xdebug-beta && \
-docker-php-ext-enable xdebug && \
+RUN pecl install xdebug-beta apcu && \
+docker-php-ext-enable xdebug apcu && \
 docker-php-ext-install pdo pdo_mysql
 
 RUN echo "env[PHP_IDE_CONFIG] = \"serverName=bot\"" >> /usr/local/etc/php-fpm.d/www.conf

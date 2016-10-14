@@ -1,7 +1,7 @@
 app:
   build: ./startup/
   volumes:
-    - "$HOME/projects/second-bot/:/opt/app"
+    - "${PROJECT_SRC}:/opt/app"
     - "./startup:/opt/startup"
 
 fpm:
@@ -10,6 +10,8 @@ fpm:
     - app
   links:
     - db:db
+  environment:
+    - BOT_API_KEY=${BOT_API_KEY}
 
 nginx:
   hostname: nginx
@@ -38,6 +40,8 @@ connect:
   volumes_from:
     - app
   command: php /opt/startup/startup.php
+  environment:
+    - BOT_API_KEY=${BOT_API_KEY}
 
 db:
   hostname: db
